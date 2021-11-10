@@ -7,6 +7,7 @@ public class Profile : MonoBehaviour
 {
     public static Profile Instance { get; private set; }
     public ProfileData data;
+    public List<string> savedProfiles;
 
     // Start is called before the first frame update
     void Start()
@@ -19,22 +20,38 @@ public class Profile : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(Instance);
         }
+        SearchSavedProfiles();
     }
 
-    // Recover saved data from local file. Return false if the file is missing.
-    public bool Load(string profileName)
+    // Recover saved data from local file. Create a new profile if the file is missing.
+    public void Load(string profileName)
     {
-        bool hasBeenLoaded = false;
-        if (File.Exists(profileName)) 
+        string json;
+        string path =  Application.persistentDataPath + "/" + profileName + ".json";
+        if (File.Exists(path)) 
         {
-            string json = File.ReadAllText(profileName);
+            json = File.ReadAllText(path);
             data = JsonUtility.FromJson<ProfileData>(json);
-            hasBeenLoaded = true;
         } else
         {
-            Debug.Log("Missing profile file.");
+            data = new ProfileData(profileName);
+            json = JsonUtility.ToJson(data);
+            File.WriteAllText(path, json);
         }
-        return hasBeenLoaded;
+        SearchSavedProfiles();
+    }
+
+    public void SearchSavedProfiles()
+    {
+        string directory = Application.persistentDataPath;
+        string[] filePathsArray = Directory.GetFiles(directory);
+        savedProfiles = new List<string>();
+
+        // Consider each file name is a profile name, and save it in a public array.
+        foreach (string filePath in filePathsArray)
+        {
+            savedProfiles.Add(Path.GetFileNameWithoutExtension(filePath));
+        }
     }
 
     public class ProfileData
@@ -44,5 +61,14 @@ public class Profile : MonoBehaviour
         public bool hasOngoingGame;
         public long bestScore;
         public long maxLevel;
+
+        public ProfileData(string newName)
+        {
+            name = newName;
+            unlocks = new bool[5];
+            hasOngoingGame = false;
+            bestScore = 0;
+            maxLevel = 0;
+        }
     }
 }

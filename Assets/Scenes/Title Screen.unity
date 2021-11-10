@@ -286,7 +286,7 @@ Transform:
   m_Children:
   - {fileID: 621400887}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &224295331
 GameObject:
@@ -959,7 +959,7 @@ Transform:
   m_Children:
   - {fileID: 342279854}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &606967737
 GameObject:
@@ -1046,11 +1046,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1449267575}
         m_TargetAssemblyTypeName: TitleScreen, Assembly-CSharp
-        m_MethodName: SecretsScreen
-        m_Mode: 1
+        m_MethodName: DisplayCanva
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 954488769}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1179,11 +1179,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1449267575}
         m_TargetAssemblyTypeName: TitleScreen, Assembly-CSharp
-        m_MethodName: ProfileScreen
-        m_Mode: 1
+        m_MethodName: DisplayCanva
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 495421307}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1557,7 +1557,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &734896154
 GameObject:
@@ -1778,7 +1778,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1449267575}
         m_TargetAssemblyTypeName: TitleScreen, Assembly-CSharp
-        m_MethodName: CreateNewProfile
+        m_MethodName: ToggleProfileCreation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1929,7 +1929,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &956246846
 GameObject:
@@ -2146,7 +2146,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &997869808
 GameObject:
@@ -2861,7 +2861,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1336215989
 GameObject:
@@ -3253,7 +3253,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1578888311
 GameObject:
@@ -3552,6 +3552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e550f3dc8dde4a41ad3ee35d4dc0721, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  savedProfiles: []
 --- !u!4 &1596807825
 Transform:
   m_ObjectHideFlags: 0
@@ -3564,7 +3565,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1672395911
 GameObject:

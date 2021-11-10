@@ -8,9 +8,9 @@ using TMPro;
 using UnityEditor;
 #endif
 
+// The title screen can display three different menus and buttons. Each set is managed through a canva.
 public class TitleScreen : MonoBehaviour
 { 
-    // The title screen can display different menus and buttons. Each set is managed through a canva.
     GameObject gameCanva, profilesCanva, secretsCanva;
     TMP_Dropdown profileSelector;
     TMP_InputField newProfileName;
@@ -18,19 +18,24 @@ public class TitleScreen : MonoBehaviour
 
 
     // Start is called before the first frame update.
-    // Initialisation of the canvas then display the title/game screen.
     void Start()
     {
-        // Identifies the canvas.
+        // Set the canvas defined in the editor.
         gameCanva = GameObject.Find("Game Canva");
         profilesCanva = GameObject.Find("Profiles Canva");
         secretsCanva = GameObject.Find("Secrets Canva");
 
-        // Stores items to be toggled later.
+        // Stores items to be toggled later (can't find them when the canva is not active).
         profileSelector = GameObject.Find("Existing Profiles").GetComponent<TMP_Dropdown>();
         newProfileName = GameObject.Find("New Name").GetComponent<TMP_InputField>();
 
-        GameScreen();
+        // Initialize a consistent profile canva. Toggling will maintain consistency.
+        profileSelector.gameObject.SetActive(true);
+        newProfileName.gameObject.SetActive(false);
+        createProfileOrCancel.text = "Create new";
+
+        // Display the game canva.
+        DisplayCanva(gameCanva);
     }
 
     // Update is called once per frame
@@ -39,45 +44,33 @@ public class TitleScreen : MonoBehaviour
         
     }
 
-    public void GameScreen()
+    // Activates the canva passed as a parameter in the editor, and desactivates the others.
+    public void DisplayCanva(GameObject canva)
     {
-        gameCanva.SetActive(true);
-        profilesCanva.SetActive(false);
-        secretsCanva.SetActive(false);
+        if(Profile.Instance)
+            RefreshSelector();
+        gameCanva.SetActive(canva == gameCanva);
+        profilesCanva.SetActive(canva == profilesCanva);
+        secretsCanva.SetActive(canva == secretsCanva);
     }
 
-    public void ProfileScreen()
-    {
-        gameCanva.SetActive(false);
-        profilesCanva.SetActive(true);
-        secretsCanva.SetActive(false);
-        newProfileName.gameObject.SetActive(false);
-    }
-
-    public void SecretsScreen()
-    {
-        gameCanva.SetActive(false);
-        profilesCanva.SetActive(false);
-        secretsCanva.SetActive(true);
-    }
-
+    // Set the player profile to the selected or new value.
     public void SelectProfile()
     {
         if (profileSelector.IsActive())
         {
-            Debug.Log(profileSelector.captionText.text);
+            Profile.Instance.Load(profileSelector.captionText.text);
         } else
         {
-            Debug.Log(newProfileName.text);
-            createProfileOrCancel.text = "Create new";
-            profileSelector.gameObject.SetActive(true);
-            newProfileName.gameObject.SetActive(false);
+            Profile.Instance.Load(newProfileName.text);
+            // Toggle profile creating items to prioritize selection over creation.
+            ToggleProfileCreation();
         }
-        GameScreen();
+        DisplayCanva(gameCanva);
     }
 
-    // Toggle the displays of the profile selector and the input field.
-    public void CreateNewProfile()
+    // Toggle the displays of the profile selector, the input field, and the text on the toggling button.
+    public void ToggleProfileCreation()
     {
         profileSelector.gameObject.SetActive(!profileSelector.IsActive());
         newProfileName.gameObject.SetActive(!newProfileName.IsActive());
@@ -88,9 +81,16 @@ public class TitleScreen : MonoBehaviour
         {
             createProfileOrCancel.text = "Create new";
         }
+        RefreshSelector();
     }
 
+    void RefreshSelector()
+    {
+        profileSelector.ClearOptions();
+        profileSelector.AddOptions(Profile.Instance.savedProfiles);
+    }
 
+    // Exit the application.
     public void Exit()
     {
 #if UNITY_EDITOR
