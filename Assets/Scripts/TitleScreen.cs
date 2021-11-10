@@ -69,6 +69,7 @@ public class TitleScreen : MonoBehaviour
         } else
         {
             Debug.Log(newProfileName.text);
+            createProfileOrCancel.text = "Create new";
             profileSelector.gameObject.SetActive(true);
             newProfileName.gameObject.SetActive(false);
         }
