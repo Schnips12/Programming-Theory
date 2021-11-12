@@ -27,8 +27,8 @@ public class Profile : MonoBehaviour
     public void Load(string profileName)
     {
         string json;
-        string path =  Application.persistentDataPath + "/" + profileName + ".json";
-        if (File.Exists(path)) 
+        string path = Application.persistentDataPath + "/" + profileName + ".json";
+        if (File.Exists(path))
         {
             json = File.ReadAllText(path);
             data = JsonUtility.FromJson<ProfileData>(json);
@@ -37,8 +37,8 @@ public class Profile : MonoBehaviour
             data = new ProfileData(profileName);
             json = JsonUtility.ToJson(data);
             File.WriteAllText(path, json);
+            savedProfiles.Add(profileName);
         }
-        SearchSavedProfiles();
     }
 
     public void SearchSavedProfiles()

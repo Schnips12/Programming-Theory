@@ -97,8 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000002, guid: ae40d6586323f774db83838f16f3bc92, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 8d34742f13efd554bbf6a6f9cfd16cde, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -3240,7 +3240,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbea57b0a60dbb04fa97aa1b90ed4181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameCanva: {fileID: 151567743}
+  profilesCanva: {fileID: 495421307}
+  secretsCanva: {fileID: 954488769}
+  forfeitButton: {fileID: 1925681453}
+  startGame: {fileID: 1855072965}
+  profileSelector: {fileID: 1400803635}
+  newProfileName: {fileID: 224295333}
   createProfileOrCancel: {fileID: 295888889}
+  title: {fileID: 734896156}
 --- !u!4 &1449267576
 Transform:
   m_ObjectHideFlags: 0
@@ -4056,13 +4064,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1449267574}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1449267575}
+        m_TargetAssemblyTypeName: TitleScreen, Assembly-CSharp
+        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4214,7 +4222,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1925681454
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4279,13 +4287,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1449267574}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1449267575}
+        m_TargetAssemblyTypeName: TitleScreen, Assembly-CSharp
+        m_MethodName: ForfeitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

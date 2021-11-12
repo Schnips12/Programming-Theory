@@ -8,32 +8,25 @@ using TMPro;
 using UnityEditor;
 #endif
 
-// The title screen can display three different menus and buttons. Each set is managed through a canva.
+/// <summary>The title screen can display three different menus and buttons.
+/// Each set is managed through a canva.</summary>
 public class TitleScreen : MonoBehaviour
 { 
-    GameObject gameCanva, profilesCanva, secretsCanva;
-    TMP_Dropdown profileSelector;
-    TMP_InputField newProfileName;
-    public TMP_Text createProfileOrCancel;
-
+    public GameObject gameCanva, profilesCanva, secretsCanva, forfeitButton, startGame;
+    public TMP_Dropdown profileSelector;
+    public TMP_InputField newProfileName;
+    public TMP_Text createProfileOrCancel, title;
 
     // Start is called before the first frame update.
     void Start()
     {
-        // Set the canvas defined in the editor.
-        gameCanva = GameObject.Find("Game Canva");
-        profilesCanva = GameObject.Find("Profiles Canva");
-        secretsCanva = GameObject.Find("Secrets Canva");
-
-        // Stores items to be toggled later (can't find them when the canva is not active).
-        profileSelector = GameObject.Find("Existing Profiles").GetComponent<TMP_Dropdown>();
-        newProfileName = GameObject.Find("New Name").GetComponent<TMP_InputField>();
-
         // Initialize a consistent profile canva. Toggling will maintain consistency.
         profileSelector.gameObject.SetActive(true);
         newProfileName.gameObject.SetActive(false);
         createProfileOrCancel.text = "Create new";
 
+        // TODO : change button label if no profile is selected
+        SetStartGameButton();
         // Display the game canva.
         DisplayCanva(gameCanva);
     }
@@ -44,17 +37,21 @@ public class TitleScreen : MonoBehaviour
         
     }
 
-    // Activates the canva passed as a parameter in the editor, and desactivates the others.
+    /// <summary>Activates the canva passed as a parameter in the editor, and desactivates the others.</summary>
     public void DisplayCanva(GameObject canva)
     {
+        // If the profile manager is initialised, use it to set the profile selector.
         if(Profile.Instance)
+        {
             RefreshSelector();
+        }
+        
         gameCanva.SetActive(canva == gameCanva);
         profilesCanva.SetActive(canva == profilesCanva);
         secretsCanva.SetActive(canva == secretsCanva);
     }
 
-    // Set the player profile to the selected or new value.
+    /// <summary>Set the player profile to the selected or new value.</summary>
     public void SelectProfile()
     {
         if (profileSelector.IsActive())
@@ -66,10 +63,54 @@ public class TitleScreen : MonoBehaviour
             // Toggle profile creating items to prioritize selection over creation.
             ToggleProfileCreation();
         }
+        SetStartGameButton();
+
+        if (Profile.Instance.data.hasOngoingGame)
+        {
+            startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Resume game";
+            forfeitButton.gameObject.SetActive(true);
+        } else
+        {
+            startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Start new game";
+            forfeitButton.gameObject.SetActive(false);
+        }
+        title.text = Profile.Instance.data.name;
         DisplayCanva(gameCanva);
     }
 
-    // Toggle the displays of the profile selector, the input field, and the text on the toggling button.
+    /// <summary>Display a button to resume the saved game (or to forfeit it) if such a game is stored.</summary>
+    public void SetStartGameButton()
+    {
+        bool hasOngoingGame = false;
+        if (Profile.Instance != null)
+        {
+            hasOngoingGame = Profile.Instance.data.hasOngoingGame;
+        }
+
+        if (hasOngoingGame)
+        {
+            startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Resume game";
+            forfeitButton.gameObject.SetActive(true);
+        } else
+        {
+            startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Start new game";
+            forfeitButton.gameObject.SetActive(false);
+        }
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("Playing", LoadSceneMode.Single);
+    }
+
+    public void ForfeitGame()
+    {
+        startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Start new game";
+        forfeitButton.gameObject.SetActive(false);
+    }
+
+    /// <summary>Toggle the displays of the profile selector, the input field,
+    /// and the text on the toggling button.</summary>
     public void ToggleProfileCreation()
     {
         profileSelector.gameObject.SetActive(!profileSelector.IsActive());
@@ -84,6 +125,8 @@ public class TitleScreen : MonoBehaviour
         RefreshSelector();
     }
 
+    /// <summary>Refresh the list of profiles the user can pick from.
+    /// To force checking the save files, invoke Profile.Instance.SearchSavedProfiles() beforehand.</summary>
     void RefreshSelector()
     {
         profileSelector.ClearOptions();
@@ -99,5 +142,4 @@ public class TitleScreen : MonoBehaviour
         Application.Quit();
 #endif
     }
-
 }
