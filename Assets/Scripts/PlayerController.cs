@@ -5,13 +5,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     Rigidbody playerRb;
+    GameManager manager;
     float speed = 5;
-    public bool isInFinishArea;
+    bool isTriggering;
 
     // Start is called before the first frame update
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
+        manager = GameManager.FindObjectOfType<GameManager>();
     }
 
     // Update is called once per frame
@@ -20,9 +22,16 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Vertical") * Time.deltaTime * speed;
         float verticalInput = - Input.GetAxis("Horizontal") * Time.deltaTime * speed;
         playerRb.AddForce(new Vector3(horizontalInput, 0, verticalInput), ForceMode.Impulse);
-        if(transform.position.x < -10 & playerRb.velocity.x < 0)
+
+        isTriggering = false;
+        ForbidBacktrack();
+    }
+
+    void ForbidBacktrack()
+    {
+        if(transform.position.x < -9.5 & playerRb.velocity.x < 0)
         {
-            transform.position = new Vector3(-10, transform.position.y, transform.position.z);
+            transform.position = new Vector3(-9.5f, transform.position.y, transform.position.z);
             playerRb.velocity = new Vector3(0, playerRb.velocity.y, playerRb.velocity.z);
         }
     }
@@ -39,15 +48,11 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Finish"))
         {
-            isInFinishArea = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Finish"))
-        {
-            isInFinishArea = false;
+            if(!isTriggering)
+            {
+                isTriggering = true;
+                manager.LevelComplete(); 
+            }
         }
     }
 }

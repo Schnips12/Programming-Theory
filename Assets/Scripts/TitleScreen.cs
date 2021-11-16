@@ -60,20 +60,11 @@ public class TitleScreen : MonoBehaviour
         } else
         {
             Profile.Instance.Load(newProfileName.text);
-            // Toggle profile creating items to prioritize selection over creation.
+            // Toggle profile creating items to prioritize selection over a second creation on next load.
             ToggleProfileCreation();
         }
-        SetStartGameButton();
 
-        if (Profile.Instance.data.hasOngoingGame)
-        {
-            startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Resume game";
-            forfeitButton.gameObject.SetActive(true);
-        } else
-        {
-            startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Start new game";
-            forfeitButton.gameObject.SetActive(false);
-        }
+        SetStartGameButton();
         title.text = Profile.Instance.data.name;
         DisplayCanva(gameCanva);
     }
@@ -81,26 +72,22 @@ public class TitleScreen : MonoBehaviour
     /// <summary>Display a button to resume the saved game (or to forfeit it) if such a game is stored.</summary>
     public void SetStartGameButton()
     {
-        bool hasOngoingGame = false;
-        if (Profile.Instance != null)
+        if (Profile.Instance.data != null) 
         {
-            hasOngoingGame = Profile.Instance.data.hasOngoingGame;
-        }
-
-        if (hasOngoingGame)
-        {
-            startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Resume game";
-            forfeitButton.gameObject.SetActive(true);
+            if (Profile.Instance.data.hasOngoingGame)
+            {
+                startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Resume game";
+                forfeitButton.gameObject.SetActive(true);
+            } else
+            {
+                startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Start new game";
+                forfeitButton.gameObject.SetActive(false);
+            }
         } else
         {
-            startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Start new game";
+            startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Select a profile";
             forfeitButton.gameObject.SetActive(false);
         }
-    }
-
-    public void StartGame()
-    {
-        SceneManager.LoadScene("Playing", LoadSceneMode.Single);
     }
 
     public void ForfeitGame()
@@ -141,5 +128,11 @@ public class TitleScreen : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    public void StartGame()
+    {
+        if (Profile.Instance.data != null)
+            SceneManager.LoadScene("Playing", LoadSceneMode.Single);
     }
 }

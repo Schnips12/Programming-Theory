@@ -69,6 +69,6 @@ public class Profile : MonoBehaviour
             hasOngoingGame = false;
             bestScore = 0;
             maxLevel = 0;
-        }
+        }        
     }
 }
