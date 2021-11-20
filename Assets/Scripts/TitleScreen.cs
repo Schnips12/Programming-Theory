@@ -12,7 +12,7 @@ using UnityEditor;
 /// Each set is managed through a canva.</summary>
 public class TitleScreen : MonoBehaviour
 { 
-    public GameObject gameCanva, profilesCanva, secretsCanva, forfeitButton, startGame;
+    public GameObject gameCanva, profilesCanva, secretsCanva, secretsButton, forfeitButton, startGame;
     public TMP_Dropdown profileSelector;
     public TMP_InputField newProfileName;
     public TMP_Text createProfileOrCancel, title;
@@ -25,23 +25,20 @@ public class TitleScreen : MonoBehaviour
         newProfileName.gameObject.SetActive(false);
         createProfileOrCancel.text = "Create new";
 
-        // TODO : change button label if no profile is selected
-        SetStartGameButton();
-        // Display the game canva.
+        // Display the profile canva.
         DisplayCanva(gameCanva);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     /// <summary>Activates the canva passed as a parameter in the editor, and desactivates the others.</summary>
     public void DisplayCanva(GameObject canva)
     {
-        // If the profile manager is initialised, use it to set the profile selector.
-        if(Profile.Instance)
+        if(canva == gameCanva)
+        {
+            SetStartGameButton();
+            secretsButton.SetActive(Profile.Instance.data != null);
+        }
+
+        if(canva == profilesCanva)
         {
             RefreshSelector();
         }
@@ -64,34 +61,36 @@ public class TitleScreen : MonoBehaviour
             ToggleProfileCreation();
         }
 
-        SetStartGameButton();
         title.text = Profile.Instance.data.name;
         DisplayCanva(gameCanva);
     }
 
-    /// <summary>Display a button to resume the saved game (or to forfeit it) if such a game is stored.</summary>
+    /// <summary>The "Start Game" button can have three state : disabled, start new game or resume.
+    /// The behavior is based on the loaded profile data.</summary>
     public void SetStartGameButton()
     {
         if (Profile.Instance.data != null) 
         {
             if (Profile.Instance.data.hasOngoingGame)
             {
+                startGame.SetActive(true);
                 startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Resume game";
                 forfeitButton.gameObject.SetActive(true);
             } else
             {
-                startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Start new game";
-                forfeitButton.gameObject.SetActive(false);
+                ForceNewGame();
             }
         } else
         {
-            startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Select a profile";
+            startGame.SetActive(false);
             forfeitButton.gameObject.SetActive(false);
         }
     }
 
-    public void ForfeitGame()
+    /// <summary>Allow the user to start a new game regardless of having a saved game.</summary>
+    public void ForceNewGame()
     {
+        startGame.SetActive(true);
         startGame.GetComponentInChildren<TextMeshProUGUI>().text = "Start new game";
         forfeitButton.gameObject.SetActive(false);
     }
@@ -118,6 +117,7 @@ public class TitleScreen : MonoBehaviour
     {
         profileSelector.ClearOptions();
         profileSelector.AddOptions(Profile.Instance.savedProfiles);
+        profileSelector.value = Profile.Instance.GetProfileIndex();
     }
 
     // Exit the application.
@@ -130,6 +130,8 @@ public class TitleScreen : MonoBehaviour
 #endif
     }
 
+    /// <summary>Load the gameplay scene.</summary>
+    // TODO Here or in the Game Manager, allow to resume a saved game. A parameter should be passed here.
     public void StartGame()
     {
         if (Profile.Instance.data != null)

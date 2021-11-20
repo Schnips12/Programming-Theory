@@ -11,8 +11,7 @@ public class TileManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        //finishArea = GameObject.FindWithTag("Finish");
-        travel = new Vector3(20.0f, 0.0f, -15.0f);
+        travel = new Vector3(-20.0f, 0.0f, 15.0f);
     }
 
     // Update is called once per frame
@@ -27,6 +26,9 @@ public class TileManager : MonoBehaviour
         finishArea.GetComponent<Collider>().enabled = false;
     }
 
+    // ABSTRACTION
+    /// <summary>Call this method to activate a specified number of bumpers.
+    /// If unused, the maximum amount of bumpers will be activated.</summary>
     public void SetBumpers(long numberToActivate)
     {
         for (int index = 0; index < bumpers.Length ; index++)

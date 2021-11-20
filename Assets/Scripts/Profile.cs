@@ -5,13 +5,18 @@ using System.IO;
 
 public class Profile : MonoBehaviour
 {
+    // ENCAPSULATION
     public static Profile Instance { get; private set; }
+
     public ProfileData data;
-    public List<string> savedProfiles;
+    
+    // ENCAPSULATION
+    public List<string> savedProfiles { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
+        // SINGLETON
         if (Instance != null)
         {
             Destroy(gameObject);
@@ -20,6 +25,7 @@ public class Profile : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(Instance);
         }
+
         SearchSavedProfiles();
     }
 
@@ -41,6 +47,8 @@ public class Profile : MonoBehaviour
         }
     }
 
+    /// <summary>Check the local directory for save files.
+    /// The filenames are then added to the public list of savedProfiles.</summary>
     public void SearchSavedProfiles()
     {
         string directory = Application.persistentDataPath;
@@ -48,10 +56,20 @@ public class Profile : MonoBehaviour
         savedProfiles = new List<string>();
 
         // Consider each file name is a profile name, and save it in a public array.
+        // TODO check for file format to confirm it's a valid profile data file.
         foreach (string filePath in filePathsArray)
         {
             savedProfiles.Add(Path.GetFileNameWithoutExtension(filePath));
         }
+    }
+    /// <summary>Return the index of the current profile in the list of found profiles.</summary>
+    public int GetProfileIndex()
+    {
+        if(data != null & savedProfiles != null)
+        {
+            return savedProfiles.FindIndex(x => x == data.name);
+        }
+        return -1;
     }
 
     public class ProfileData

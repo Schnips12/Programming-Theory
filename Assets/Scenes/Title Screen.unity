@@ -3243,6 +3243,7 @@ MonoBehaviour:
   gameCanva: {fileID: 151567743}
   profilesCanva: {fileID: 495421307}
   secretsCanva: {fileID: 954488769}
+  secretsButton: {fileID: 606967737}
   forfeitButton: {fileID: 1925681453}
   startGame: {fileID: 1855072965}
   profileSelector: {fileID: 1400803635}
@@ -4289,7 +4290,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1449267575}
         m_TargetAssemblyTypeName: TitleScreen, Assembly-CSharp
-        m_MethodName: ForfeitGame
+        m_MethodName: ForceNewGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

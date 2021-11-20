@@ -36,14 +36,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.CompareTag("Bumper"))
-        {
-            playerRb.AddForce(other.GetContact(0).normal * (10), ForceMode.Impulse);
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Finish"))
@@ -54,5 +46,11 @@ public class PlayerController : MonoBehaviour
                 manager.LevelComplete(); 
             }
         }
+    }
+
+    // Probably useless since the RigidBody can be retrieved from in other scripts with GetComponent...
+    public void AddForce(Vector3 direction, float intensity)
+    {
+        playerRb.AddForce(direction * intensity, ForceMode.Impulse);
     }
 }

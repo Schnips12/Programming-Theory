@@ -16,4 +16,20 @@ public class BumperController : MonoBehaviour
         transform.Rotate(Vector3.up, Space.World);
         
     }
+
+    public virtual void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            ActionOnPlayer(other.gameObject.GetComponent<PlayerController>(), other.GetContact(0).normal.normalized);
+        }
+    }
+
+    // POLYMORPHISM virtual
+    public virtual void ActionOnPlayer(PlayerController player, Vector3 direction)
+    {
+        player.AddForce(- direction, 5);
+    }
+
+
 }

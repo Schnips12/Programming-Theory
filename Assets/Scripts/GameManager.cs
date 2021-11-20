@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
 
     public void LevelComplete()
     {
-        if(score >= 0)
+        if(score >= 3)
         {
             SceneManager.LoadScene("Title Screen", LoadSceneMode.Single);
         }
@@ -64,16 +64,28 @@ public class GameManager : MonoBehaviour
 
         // Prepare to translate.
         float timeStartMovement = Time.time;
-        Vector3 translation = - currentLevel.GetComponent<TileManager>().travel;
+        float elapsedTime = 0;
+        float percentageOfTransition = 0;
+
+        Vector3 nextLevelStartPos = nextLevel.transform.position;
+        Vector3 currentLevelStartPos = currentLevel.transform.position;
+        Vector3 previousLevelStartPos = previousLevel.transform.position;
+        Vector3 playerStartPos = player.transform.position;
+
+        Vector3 translation = currentLevel.GetComponent<TileManager>().travel;
         Vector3 step;
 
-        while(Time.time <= (timeStartMovement + transitionDuration))
+        while(percentageOfTransition < 1)
         {
-            step = (Time.deltaTime / transitionDuration) * translation;
-            nextLevel.transform.Translate(step, Space.World);
-            currentLevel.transform.Translate(step, Space.World);
-            previousLevel.transform.Translate(step, Space.World);
-            player.transform.Translate(step, Space.World);
+            elapsedTime = Time.time - timeStartMovement;
+            percentageOfTransition = Math.Min(elapsedTime/transitionDuration, 1);
+            step = Vector3.Lerp(Vector3.zero, translation, percentageOfTransition);
+
+            nextLevel.transform.position = nextLevelStartPos + step;
+            currentLevel.transform.position = currentLevelStartPos + step;
+            previousLevel.transform.position = previousLevelStartPos + step;
+            player.transform.position = playerStartPos + step;
+
             yield return null;
         }
 
@@ -94,7 +106,7 @@ public class GameManager : MonoBehaviour
 
     void LoadNext()
     {
-        Vector3 currentSize = currentLevel.GetComponent<TileManager>().travel;
+        Vector3 currentSize = - currentLevel.GetComponent<TileManager>().travel;
         nextLevel = Instantiate(Tile, currentLevel.transform.position + currentSize, Tile.transform.rotation);
         nextLevel.GetComponent<TileManager>().SetBumpers(score + 1);
     }
